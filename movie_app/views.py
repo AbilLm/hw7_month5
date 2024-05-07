@@ -48,3 +48,14 @@ def review_id(request, id):
         return Response(serializer.data)
     except Review.DoesNotExist:
         return Response(data={'error': 'Review not found!'}, status=status.HTTP_404_NOT_FOUND)
+@api_view(['GET'])
+def movie_reviews(request):
+    movies = Movie.objects.all()
+    serializer = MovieSerializer(movies, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def director_list(request):
+    directors = Director.objects.all()
+    serializer = DirectorSerializer(directors, many=True)
+    return Response(serializer.data)
