@@ -22,3 +22,4 @@ class Review(models.Model):
     stars = models.IntegerField(default=1, choices=[(i, i) for i in range(1, 6)])
     def __str__(self):
         return self.text
+

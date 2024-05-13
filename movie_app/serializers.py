@@ -53,6 +53,11 @@ class DirectorValidateSerializer(serializers.Serializer):
             raise ValidationError("Добавьте имя режиссера")
         return value
 
+    def update(self, director, validated_data):
+        director.name = validated_data.get('name', director.name)
+        director.save()
+        return director
+
 class MovieValidateSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=100)
     description = serializers.CharField(max_length=500)
@@ -71,6 +76,14 @@ class MovieValidateSerializer(serializers.Serializer):
             raise ValidationError("Режиссер с id {} не существует".format(value))
         return value
 
+    def update(self, movie, validated_data):
+        movie.title = validated_data.get('title', movie.title)
+        movie.description = validated_data.get('description', movie.description)
+        movie.duration = validated_data.get('duration', movie.duration)
+        movie.director = validated_data.get('director', movie.director)
+        movie.save()
+        return movie
+
 class ReviewValidateSerializer(serializers.Serializer):
     text = serializers.CharField(max_length=500)
     stars = serializers.IntegerField()
@@ -87,3 +100,10 @@ class ReviewValidateSerializer(serializers.Serializer):
         except Movie.DoesNotExist:
             raise ValidationError("Фильм с id {} не существует".format(value))
         return value
+
+    def update(self, review, validated_data):
+        # Обновление данных отзыва
+        review.text = validated_data.get('text', review.text)
+        review.movie = validated_data.get('movie', review.movie)
+        review.save()
+        return review
